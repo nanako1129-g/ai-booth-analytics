@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <title>AI BOOTH ANALYTICS — Camera Check</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header>
+        <p class="eyebrow">STACK-CHAN CAMERA / STEP 1–2</p>
+        <h1>AI BOOTH ANALYTICS</h1>
+        <p class="lead">人物解析を始める前の、カメラ映像・Wi-Fi安定性チェック画面です。</p>
+      </header>
+
+      <section class="connection" aria-labelledby="connection-title">
+        <div>
+          <h2 id="connection-title">CoreS3へ接続</h2>
+          <p>CoreS3の画面に表示されたIPアドレスを入力してください。</p>
+        </div>
+        <form id="connection-form">
+          <label for="host">IPアドレスまたはホスト名</label>
+          <div class="form-row">
+            <input id="host" name="host" value="stackchan-camera.local" autocomplete="off" spellcheck="false" />
+            <button type="submit">接続</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="monitor" aria-live="polite">
+        <div class="monitor-bar">
+          <div class="status-wrap">
+            <span id="status-dot" class="status-dot is-idle"></span>
+            <span id="status-text">未接続</span>
+          </div>
+          <a id="direct-link" href="#" target="_blank" rel="noreferrer">CoreS3を直接開く</a>
+        </div>
+        <div class="video-frame">
+          <img id="stream" alt="CoreS3のライブカメラ映像" />
+          <div id="placeholder" class="placeholder">
+            <span>NO SIGNAL</span>
+            <small>IPアドレスを確認して「接続」を押してください</small>
+          </div>
+        </div>
+        <div class="privacy-row">
+          <span>320 × 240 MJPEG</span>
+          <span>映像保存なし</span>
+          <span>顔認識なし</span>
+        </div>
+      </section>
+
+      <section class="checklist">
+        <h2>今回の合格条件</h2>
+        <label><input type="checkbox" /> 映像が表示された</label>
+        <label><input type="checkbox" /> 人が歩く様子を目視できた</label>
+        <label><input type="checkbox" /> 30分間停止しなかった</label>
+        <label><input type="checkbox" /> 切断後に再接続できた</label>
+      </section>
+    </main>
+    <script src="viewer.js"></script>
+  </body>
+</html>

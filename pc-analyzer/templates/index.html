@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>AI BOOTH ANALYTICS — Person Tracking</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header>
+        <p class="eyebrow">STACK-CHAN CAMERA / STEP 3</p>
+        <h1>AI BOOTH ANALYTICS</h1>
+        <p class="lead">人物検出 + ByteTrackによるセッション内匿名ID</p>
+      </header>
+
+      <section class="kpis" aria-label="リアルタイム状態">
+        <article class="primary-kpi">
+          <span>通過カウント</span>
+          <strong id="passages">0</strong>
+        </article>
+        <article class="attention-kpi">
+          <span>立ち止まり人数</span>
+          <strong id="stops">0</strong>
+        </article>
+        <article class="rate-kpi">
+          <span>立ち止まり率</span>
+          <strong id="stop-rate">—</strong>
+        </article>
+        <article class="booth-kpi">
+          <span>ブース来訪人数</span>
+          <strong id="visitors">0</strong>
+        </article>
+        <article class="rate-kpi">
+          <span>来訪率</span>
+          <strong id="visit-rate">—</strong>
+        </article>
+        <article class="dwell-kpi">
+          <span>平均滞在時間</span>
+          <strong><span id="average-dwell">0.0</span><small> 秒</small></strong>
+        </article>
+        <article>
+          <span>現在の検出人数</span>
+          <strong id="people">—</strong>
+        </article>
+        <article>
+          <span>解析速度</span>
+          <strong><span id="fps">—</span><small> FPS</small></strong>
+        </article>
+        <article>
+          <span>方向別</span>
+          <strong class="direction"><span id="left-right">0</span> → / <span id="right-left">0</span> ←</strong>
+        </article>
+      </section>
+
+      <section class="monitor">
+        <div class="monitor-bar">
+          <div><span id="dot" class="dot waiting"></span><span id="status">起動中…</span></div>
+          <span>YOLO nano + ByteTrack</span>
+        </div>
+        <div class="video-frame">
+          <img src="/stream" alt="匿名ID付き人物検出ライブ映像" />
+        </div>
+      </section>
+
+      <section class="privacy">
+        <span>映像保存なし</span>
+        <span>顔認識なし</span>
+        <span>属性推定なし</span>
+        <span>IDは起動中のみ</span>
+      </section>
+
+      <section class="counter-controls">
+        <div>
+          <strong>黄色線＝通過 / 青枠＝注目 / 紫枠＝ブース</strong>
+          <p>通路側で検出された匿名IDが紫枠へ入ると来訪、出るまでを滞在時間として測ります。</p>
+        </div>
+        <button id="reset-counts" type="button">計測を0に戻す</button>
+      </section>
+
+      <section class="tracks">
+        <h2>現在の匿名ID</h2>
+        <div id="track-list" class="track-list"><span class="empty">人物なし</span></div>
+      </section>
+    </main>
+    <script src="/static/app.js"></script>
+  </body>
+</html>

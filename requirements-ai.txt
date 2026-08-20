@@ -1,0 +1,8 @@
+# Python 3.9で動かすため、Apple Silicon対応世代を固定します。
+Flask==3.0.3
+lapx==0.5.11.post1
+numpy==1.26.4
+opencv-python==4.10.0.84
+torch==2.2.2
+torchvision==0.17.2
+ultralytics==8.3.0

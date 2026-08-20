@@ -1,0 +1,10 @@
+.venv/
+.venv-ai/
+.platformio-core/
+backups/
+models/
+.runtime/
+firmware/cores3-camera-stream/include/secrets.h
+firmware/cores3-camera-stream/.pio/
+__pycache__/
+*.pyc
