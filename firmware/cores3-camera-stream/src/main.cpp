@@ -47,6 +47,30 @@ constexpr char kIndexHtml[] = R"HTML(
 )HTML";
 
 httpd_handle_t server = nullptr;
+void showFatalError(const char* message);
+
+extern const uint8_t kNormalJpgStart[] asm("_binary_data_normal_jpg_start");
+extern const uint8_t kNormalJpgEnd[] asm("_binary_data_normal_jpg_end");
+extern const uint8_t kBlinkJpgStart[] asm("_binary_data_blink_jpg_start");
+extern const uint8_t kBlinkJpgEnd[] asm("_binary_data_blink_jpg_end");
+
+bool drawEmbeddedJpg(const uint8_t* start, const uint8_t* end) {
+    return CoreS3.Display.drawJpg(
+        start,
+        static_cast<size_t>(end - start),
+        0,
+        0);
+}
+
+void drawCameraCatScreen(bool blinking) {
+    const bool drawn = blinking
+        ? drawEmbeddedJpg(kBlinkJpgStart, kBlinkJpgEnd)
+        : drawEmbeddedJpg(kNormalJpgStart, kNormalJpgEnd);
+
+    if (!drawn) {
+        showFatalError("Cat image failed");
+    }
+}
 
 void setCommonHeaders(httpd_req_t* request) {
     httpd_resp_set_hdr(request, "Access-Control-Allow-Origin", "*");
@@ -229,21 +253,25 @@ void setup() {
     Serial.printf("Camera ready: http://%s/\n", ip.c_str());
     Serial.printf("Stream URL:  http://%s/stream\n", ip.c_str());
 
-    CoreS3.Display.fillScreen(TFT_DARKGREEN);
-    CoreS3.Display.setTextColor(TFT_WHITE, TFT_DARKGREEN);
-    CoreS3.Display.setCursor(12, 24);
-    CoreS3.Display.setTextSize(2);
-    CoreS3.Display.println("CAMERA READY");
-    CoreS3.Display.setTextSize(1);
-    CoreS3.Display.println();
-    CoreS3.Display.printf("http://%s/\n\n", ip.c_str());
-    CoreS3.Display.println("No recording");
-    CoreS3.Display.println("No face recognition");
+    drawCameraCatScreen(false);
 }
 
 void loop() {
     CoreS3.update();
     static uint32_t lastStatusAt = 0;
+    static uint32_t lastBlinkAt = 0;
+    static bool blinking = false;
+
+    if (!blinking && millis() - lastBlinkAt >= 4200) {
+        drawCameraCatScreen(true);
+        blinking = true;
+        lastBlinkAt = millis();
+    } else if (blinking && millis() - lastBlinkAt >= 140) {
+        drawCameraCatScreen(false);
+        blinking = false;
+        lastBlinkAt = millis();
+    }
+
     if (millis() - lastStatusAt >= 5000) {
         lastStatusAt = millis();
         Serial.printf(
